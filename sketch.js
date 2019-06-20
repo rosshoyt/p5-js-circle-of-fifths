@@ -36,15 +36,36 @@ function draw() {
 	let circleRadius = circleDiameter / 2;
 	// Set circle color
 	let c = color(190, 190, 190);
+	// Set circle2 dimensions
+	let bgd_circleX = circleX;
+	let bgd_circleY = circleY;
+	let bgd_circleDiameter = ((circleY > circleX) ? circleX : circleY) * 7 / 8;
+	let bgd_circleRadius = bgd_circleDiameter / 2;
+	// Set circle color
+	let bgd_circleColor = color(70, 240, 210);
+
+	// Set circle3 (INVISIBLE)
+	let txt_DispCircleX = circleX;
+	let txt_DispCircleY = circleY;
+	let txt_DispCircleDiameter = ((circleY > circleX) ? circleX : circleY) * 4 / 5;
+	let txt_DispCircleRadius = circleDiameter / 2;
+	// Paint bgd circle
+	fill(bgd_circleColor);
+	noStroke();
+	circle(bgd_circleX, bgd_circleY, bgd_circleDiameter);
+
+
+	// Paint circle#2 Main
 	fill(c);
 	noStroke();
-	// Paint background circle
 	circle(circleX, circleY, circleDiameter);
+
+
 
 	// TEXT PROPS
 	let textColor = color(255, 255, 255);
 	fill(textColor);
-	noStroke();
+	//noStroke();
 	textSize(40);
 
 
@@ -54,15 +75,22 @@ function draw() {
 	let counter = 0;
 	for(let i = 0; i <= 12; i++) {
 			let angle = slice * startingLocation;
-			let newX = circleX + circleDiameter * Math.cos(angle);
-      let newY = circleY + circleDiameter * Math.sin(angle);
+			// Generate lineX
+			let lineX = circleX + circleDiameter * Math.cos(angle);
+      let lineY = circleY + circleDiameter * Math.sin(angle);
+
+			// Generate lineX
+			let textX = circleX + txt_DispCircleDiameter * Math.cos(angle);
+      let textY = circleY + txt_DispCircleDiameter * Math.sin(angle);
+
 			// Draw Line if present in chord (development state = true)
-			if(notesPressed.has(i))line(circleX, circleY, newX, newY);
+			if(notesPressed.has(i))line(circleX, circleY, lineX, lineY);
+			//if(true) line(circleX, circleY, lineX, lineY);
 			stroke(0);
 			// Print noteName
 			var noteNames = viewSharps ? NOTENAMES_SHARP : NOTENAMES_FLAT;
-			//text(noteNames[i], newX - TEXT_XOFFSETS[i], newY + TEXT_YOFFSETS[i]);
-			text(noteNames[i], newX - textOffset, newY + textOffset);
+			//text(noteNames[i], lineX - TEXT_XOFFSETS[i], lineY + TEXT_YOFFSETS[i]);
+			text(noteNames[i], textX	 - textOffset, textY + textOffset);
 			startingLocation = (startingLocation + 1) % 12;
 	}
 }
