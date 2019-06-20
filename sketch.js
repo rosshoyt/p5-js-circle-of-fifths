@@ -7,6 +7,8 @@ const TEXT_XOFFSETS =
 				[ ];
 const TEXT_YOFFSETS =
 				[ ];
+const BUTTON1_LABEL = "SHARP    /     FLAT";
+const BUTTON2_LABEL = "CHROMATIC/    FIFTH";
 
 // Sound params
 //let notesPressed = new Array(12).fill(false);
@@ -15,15 +17,27 @@ let notesPressed = new Set();
 let KEY_PRESSED_VALS = [ 65, 87, 83, 69, 68, 70, 84, 71, 89, 72, 85, 74, 75 ];
 
 // View Vars
-let viewSharps = true; // Default to show Sharps
-let buttonFlat, buttonSharp;
+let viewSharps = true, orderChromatic = true; // Default to show Sharps
+let button_sharpFlat, button_chromaticFifth
 // Circleoffifths dimension Vars
 let slice = 2 * Math.PI / 12;
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
-}
+	button_sharpFlat = createButton(BUTTON1_LABEL);
+  button_sharpFlat.position(20,20, 65);
+  button_sharpFlat.mousePressed(swapSharpsFlats);
 
+	button_chromaticFifth = createButton(BUTTON2_LABEL);
+  button_chromaticFifth.position(20,40, 65);
+  button_chromaticFifth.mousePressed(swapChromaticFifth);
+}
+function swapSharpsFlats(){
+	viewSharps = !viewSharps;
+}
+function swapChromaticFifth(){
+	orderChromatic = !orderChromatic;
+}
 
 function draw() {
   background(0, 0, 0);
@@ -35,11 +49,11 @@ function draw() {
 	let circleDiameter = ((circleY > circleX) ? circleX : circleY) * 2 / 3;
 	let circleRadius = circleDiameter / 2;
 	// Set circle color
-	let c = color(190, 190, 190);
+	let c = color(190, 190, 210);
 	// Set circle2 dimensions
 	let bgd_circleX = circleX;
 	let bgd_circleY = circleY;
-	let bgd_circleDiameter = ((circleY > circleX) ? circleX : circleY) * 7 / 8;
+	let bgd_circleDiameter = ((circleY > circleX) ? circleX : circleY) * 15/ 16;
 	let bgd_circleRadius = bgd_circleDiameter / 2;
 	// Set circle color
 	let bgd_circleColor = color(70, 240, 210);
@@ -70,7 +84,7 @@ function draw() {
 
 
 	// Positional Variables
-	let textOffset = 10;
+	let textOffset = (bgd_circleRadius - circleRadius) / 100;
 	let startingLocation = 9;
 	let counter = 0;
 	for(let i = 0; i <= 12; i++) {
@@ -80,7 +94,7 @@ function draw() {
       let lineY = circleY + circleDiameter * Math.sin(angle);
 
 			// Generate lineX
-			let textX = circleX + txt_DispCircleDiameter * Math.cos(angle);
+			let textX = (circleX + txt_DispCircleDiameter * Math.cos(angle)) - 10;
       let textY = circleY + txt_DispCircleDiameter * Math.sin(angle);
 
 			// Draw Line if present in chord (development state = true)
@@ -90,7 +104,7 @@ function draw() {
 			// Print noteName
 			var noteNames = viewSharps ? NOTENAMES_SHARP : NOTENAMES_FLAT;
 			//text(noteNames[i], lineX - TEXT_XOFFSETS[i], lineY + TEXT_YOFFSETS[i]);
-			text(noteNames[i], textX	 - textOffset, textY + textOffset);
+			text(noteNames[i], textX	 - textOffset, textY);
 			startingLocation = (startingLocation + 1) % 12;
 	}
 }
