@@ -7,7 +7,7 @@ const TEXT_XOFFSETS =
 				[ ];
 const TEXT_YOFFSETS =
 				[ ];
-const BUTTON1_LABEL = "SHARP    /     FLAT";
+const BUTTON1_LABEL = "SHARP #/FLAT b";
 const BUTTON2_LABEL = "CHROMATIC/    FIFTH";
 
 // Sound params
@@ -17,7 +17,7 @@ let notesPressed = new Set();
 let KEY_PRESSED_VALS = [ 65, 87, 83, 69, 68, 70, 84, 71, 89, 72, 85, 74, 75 ];
 
 // View Vars
-let viewSharps = true, orderChromatic = true; // Default to show Sharps
+let viewSharps = true, orderChromatic = false; // Default to show Sharps
 let button_sharpFlat, button_chromaticFifth
 // Circleoffifths dimension Vars
 let slice = 2 * Math.PI / 12;
@@ -25,11 +25,11 @@ let slice = 2 * Math.PI / 12;
 function setup() {
 	createCanvas(windowWidth, windowHeight);
 	button_sharpFlat = createButton(BUTTON1_LABEL);
-  button_sharpFlat.position(20,20, 65);
+  button_sharpFlat.position( 20, 20, 80);
   button_sharpFlat.mousePressed(swapSharpsFlats);
 
 	button_chromaticFifth = createButton(BUTTON2_LABEL);
-  button_chromaticFifth.position(20,40, 65);
+  button_chromaticFifth.position( 20, 45, 65);
   button_chromaticFifth.mousePressed(swapChromaticFifth);
 }
 function swapSharpsFlats(){
@@ -40,7 +40,7 @@ function swapChromaticFifth(){
 }
 
 function draw() {
-  background(0, 0, 0);
+  background( 0, 0, 0);
 
 
 	// Set circle dimensions
@@ -49,11 +49,11 @@ function draw() {
 	let circleDiameter = ((circleY > circleX) ? circleX : circleY) * 2 / 3;
 	let circleRadius = circleDiameter / 2;
 	// Set circle color
-	let c = color(190, 190, 210);
+	let c = color( 250, 250, 210);
 	// Set circle2 dimensions
 	let bgd_circleX = circleX;
 	let bgd_circleY = circleY;
-	let bgd_circleDiameter = ((circleY > circleX) ? circleX : circleY) * 15/ 16;
+	let bgd_circleDiameter = ((circleY > circleX) ? circleX : circleY) * 9/10;
 	let bgd_circleRadius = bgd_circleDiameter / 2;
 	// Set circle color
 	let bgd_circleColor = color(70, 240, 210);
@@ -77,17 +77,19 @@ function draw() {
 
 
 	// TEXT PROPS
-	let textColor = color(255, 255, 255);
+	let textColor = color(240, 240, 240);
 	fill(textColor);
 	//noStroke();
-	textSize(40);
+	textSize(42);
 
 
 	// Positional Variables
 	let textOffset = (bgd_circleRadius - circleRadius) / 100;
 	let startingLocation = 9;
+
 	let counter = 0;
 	for(let i = 0; i <= 12; i++) {
+
 			let angle = slice * startingLocation;
 			// Generate lineX
 			let lineX = circleX + circleDiameter * Math.cos(angle);
@@ -97,15 +99,23 @@ function draw() {
 			let textX = (circleX + txt_DispCircleDiameter * Math.cos(angle)) - 10;
       let textY = circleY + txt_DispCircleDiameter * Math.sin(angle);
 
+			let pitch = i * 7 % 12;
 			// Draw Line if present in chord (development state = true)
-			if(notesPressed.has(i))line(circleX, circleY, lineX, lineY);
+			if(notesPressed.has(pitch)) line(circleX, circleY, lineX, lineY);
+
+
 			//if(true) line(circleX, circleY, lineX, lineY);
 			stroke(0);
 			// Print noteName
 			var noteNames = viewSharps ? NOTENAMES_SHARP : NOTENAMES_FLAT;
 			//text(noteNames[i], lineX - TEXT_XOFFSETS[i], lineY + TEXT_YOFFSETS[i]);
-			text(noteNames[i], textX	 - textOffset, textY);
+			if(orderChromatic) text(noteNames[i], textX	 - textOffset, textY);
+			if (!orderChromatic){
+				text(noteNames[pitch], textX - textOffset, textY);
+				pitch += 7;
+			}
 			startingLocation = (startingLocation + 1) % 12;
+
 	}
 }
 
