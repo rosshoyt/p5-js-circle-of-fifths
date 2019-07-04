@@ -61,7 +61,7 @@ function draw() {
 	// Set circle3 (INVISIBLE)
 	let txt_DispCircleX = circleX;
 	let txt_DispCircleY = circleY;
-	let txt_DispCircleDiameter = ((circleY > circleX) ? circleX : circleY) * 9/10;
+	let txt_DispCircleDiameter = ((circleY > circleX) ? circleX : circleY) * 4 / 5;
 	let txt_DispCircleRadius = circleDiameter / 2;
 	// Paint bgd circle
 	fill(bgd_circleColor);
@@ -80,11 +80,11 @@ function draw() {
 	let textColor = color(240, 240, 240);
 	fill(textColor);
 	//noStroke();
-	textSize(windowHeight / 15);
+	textSize(42);
 
 
 	// Positional Variables
-	let textOffset = //(bgd_circleRadius - circleRadius) / 100;
+	let textOffset = (bgd_circleRadius - circleRadius) / 100;
 	let startingLocation = 9;
 
 	let counter = 0;
